@@ -1,0 +1,68 @@
+
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<link rel="stylesheet" href="home.scss">
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<link rel="stylesheet" type="text/css" href="style.css" />
+<%= stylesheet_link_tag 'assets/style.scss', media: 'all', 'data-turbolinks-track' => true %>
+	<div style="border: 10px solid #F6D7E0; ">
+
+<center>
+    
+    <div style="width: 50%; text-align: left; background-color: rgba( 237, 232, 183, 0.3 ); padding: 20px; margin: 10px">
+        <h1 style="color:#FDA7BC; font-weight: bold; text-align: center"><%= @title %></h1>
+    
+        <p style="text-align: right"><%=@senddate%>
+                 <form action="/<%= @one_post.id %>/like_create" method="post" style="text-align: right">
+                    <button type="submit" class="fa fa-thumbs-o-up"><%= Post.find(@one_post.id).likes.count %></button>
+            </form>
+        </p>
+        <hr/>
+        <% if @one_post.image_url %>
+	          <img src="<%= @one_post.image_url%>" style="height:400px; width:300px" >
+	          
+            <% end %>
+        <p><%=@content%></p>
+        <hr/>
+
+        <form action="/<%= @one_post.id %>/comment_create" method="post">
+         <div class="form-group">
+            <label for="content">댓글작성</label>
+            <textarea class="form-control" id="content" name="content" rows="3" placeholder="content"></textarea>
+          </div>
+          <input type="hidden" name="cuser_id" value=<%=current_user.email%>>
+          <button type="submit">댓글쓰기</button>
+        </form>
+    
+           <div style="text-align: left">
+                <% @one_post.comments.each do |c| %>
+                    <p><%= c.cuser_id %></p>
+                    <p><%= c.content %></p>
+                        <a id = "commentup<%= c.id %>">수정</a>            
+                        <a href="/<%= @one_post.id %>/comment_destroy/<%= c.id %>">삭제</a>
+                        <script>
+                                $( "#commentup<%= c.id %>" ).click(function() {
+                                  $( "#comment_update<%= c.id %>" ).slideToggle( "slow");
+                                });
+                        </script>
+                        <form action="/<%= c.post_id %>/comment_update/<%= c.id %>" method="post" id="comment_update<%= c.id %>" style="display: none">
+                            <div class="form-group">
+                                <label for="content">댓글작성</label>
+                                <textarea class="form-control" id="content" name="content" rows="3" value="content"><%= c.content %></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-danger navbar-btn" style="padding-left: 20px; padding-right: 20px; margin-bottom: 20px; font-weight: bold; border-radius: 30px;" >수정하기</button>
+                        </form>
+                <% end %>              
+            </div>
+    </div>
+   
+   
+</center>
+</div>
+    

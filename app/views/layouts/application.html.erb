@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Workspace</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+  <style>
+  .ticker{
+	height: 40px;
+	overflow: hidden;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	}
+  .ticker li{
+	height: 30px;
+	padding: 5px;
+	margin: 0px 5px;
+  }
+</style>
+<script>
+	function tick(){
+		$('#ticker_01 li:first').slideUp(function(){$(this).appendTo($('#ticker_01')).slideDown();});
+	}
+	setInterval(function(){tick()},1000);
+</script>
+</head>
+<body>
+<div id="header">
+		<div class="logo">
+			<img src="/assets/winner_logo2.png" width="50px" height="30px"/>
+			<br>
+			<a href="index.html">WINNERCIRCLE</a>		
+		</div>
+		<div>
+	<ul id="ticker_01" class="ticker">
+		<li><a href="#">잘생긴 송민호</li>
+		<li><a href="#">송민호가 신서유기4에 나오고 있어요</li>
+		<li><a href="#">위너가 동물농장에서 동물을 키워요</li>
+	</ul>
+  </div>
+		<% if user_signed_in? %>
+   <p><a href="/users/edit"><%= current_user.email %></a></p>
+    <p><%= button_to "logout", destroy_user_session_path, method: :delete, data: {confirm: "Are you sure?"} %></p>
+   <p><%=current_user.roles.map(&:name).join(',').titleize %></p>
+    <% if current_user.roles.map(&:name).join(',') == 'admin'%>
+   <%= link_to "AdminPage", '/admin' %>
+<%end%>
+
+<% end %>
+	</div>
+	<div id="nav">
+		<ul>
+			<li><a href="/index">Write</a></li>
+			<!--
+			<li><a href="schedule.html">SCHEDULE</a></li>
+			<li><a href="mypage">MYPAGE</a></li>
+			-->
+		</ul>
+	</div>
+<%= yield %>
+ <div id="footer" style="margin-top: 10px; ">
+      <div style="float: left">
+		<img src="<%= image_path '/assets/bear.jpg'%>" style="border-radius: 50%; width: 50px; height: 50px;"/>
+		<br>
+		Eunsil
+		</div>
+		<div style="float: right;">
+			<p>이용약관&nbsp;|&nbsp;개인정보보호정책&nbsp;|&nbsp;고객센터</p>
+			<p>Copyright © Eunsil Corp. All rights reserved</p>
+		</div>
+	</div>
+</body>
+</html>
